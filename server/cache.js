@@ -15,6 +15,7 @@ function getCachePath(image, opts = {}) {
 	let hash = crypto.createHash("sha256");
 
 	hash.update(image);
+
 	if (Object.keys(opts).length) {
 		hash.update(qs.stringify(opts));
 	}

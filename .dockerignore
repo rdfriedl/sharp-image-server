@@ -1,0 +1,10 @@
+.idea
+.env
+.git
+.prettierignore
+*Dockerfile*
+*docker-compose*
+*docker-stack*
+node_modules
+images
+cache

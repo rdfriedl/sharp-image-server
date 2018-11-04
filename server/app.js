@@ -4,9 +4,9 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const qs = require("qs");
 const mime = require("mime-types");
 
+const pkg = require("../package.json");
 const transform = require("./transform");
 const cache = require("./cache");
 const images = require("./images");
@@ -26,7 +26,17 @@ app.use(
 
 app.use(bodyParser.json());
 
-// connect to db
+app.get("/health", (req, res) => {
+	res.send("I am happy and healthy\n");
+});
+
+app.get("/", (req, res) => {
+	res.json({
+		name: pkg.name,
+		version: pkg.version
+	}).end();
+});
+
 app.use("/", (req, res, next) => {
 	let image = req.path;
 	let opts = req.query;
@@ -35,7 +45,9 @@ app.use("/", (req, res, next) => {
 		: path.extname(image);
 
 	try {
-		res.type(mime.contentType(extname));
+		if (extname) {
+			res.type(mime.contentType(extname));
+		}
 
 		if (cache.hasImage(image, opts)) {
 			cache.createReadStream(image, opts).pipe(res);
@@ -45,14 +57,6 @@ app.use("/", (req, res, next) => {
 
 			transformStream.pipe(cache.createWriteStream(image, opts));
 			transformStream.pipe(res);
-			console.log(
-				"Rendered",
-				image,
-				"with",
-				qs.stringify(opts, { delimiter: " " }),
-				"to",
-				cache.getCachePath(image, opts)
-			);
 		} else {
 			res.status(404).end();
 		}

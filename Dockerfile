@@ -1,21 +1,29 @@
+# copied from https://github.com/BretFisher/node-docker-good-defaults/blob/master/Dockerfile
+
 FROM node:latest
-ENV NODE_ENV="production"
-ENV CACHE_DIR="/cache"
-ENV IMAGE_DIR="/images"
-ENV PORT="80"
+
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 
 VOLUME /cache
 VOLUME /images
+ENV CACHE_DIR="/cache"
+ENV IMAGE_DIR="/images"
 
-WORKDIR /app
+ARG PORT=3000
+ENV PORT $PORT
+EXPOSE $PORT
 
-COPY package*.json ./
+RUN npm i npm@latest -g
 
-RUN npm install
+WORKDIR /opt
+COPY package.json package-lock.json* ./
+RUN npm install --no-optional && npm cache clean --force
+ENV PATH /opt/node_modules/.bin:$PATH
 
-COPY server server
-COPY index.js ./
+HEALTHCHECK --interval=30s CMD node healthcheck.js
 
-EXPOSE 80
+WORKDIR /opt/app
+COPY . /opt/app
 
-CMD [ "npm", "start" ]
+CMD [ "node", "./index.js" ]
