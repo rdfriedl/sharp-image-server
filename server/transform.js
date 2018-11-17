@@ -13,10 +13,10 @@ function transform(opts = {}) {
 
 	if (width || height) {
 		// fix weired spelling of center
-		if(fit === "center"){
+		if (fit === "center") {
 			fit = "centre";
 		}
-		if(position === "center"){
+		if (position === "center") {
 			position = "centre";
 		}
 
@@ -27,7 +27,7 @@ function transform(opts = {}) {
 		});
 	}
 
-	if(greyscale){
+	if (greyscale) {
 		transform.greyscale();
 	}
 

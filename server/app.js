@@ -15,7 +15,16 @@ let app = express();
 app.server = http.createServer(app);
 
 // logger
-app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
+app.use(
+	morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev", {
+		skip(req, res) {
+			return (
+				(process.env.NODE_ENV === "production" && res.statusCode < 400) ||
+				req.path === "/health"
+			);
+		}
+	})
+);
 
 // 3rd party middleware
 app.use(
@@ -31,10 +40,12 @@ app.get("/health", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-	res.json({
-		name: pkg.name,
-		version: pkg.version
-	}).end();
+	res
+		.json({
+			name: pkg.name,
+			version: pkg.version
+		})
+		.end();
 });
 
 app.use("/", (req, res, next) => {

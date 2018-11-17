@@ -8,25 +8,31 @@
 		"start": "node index.js",
 		"format": "prettier --write **/*.{js,json,md}"
 	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "pretty-quick --staged"
+		}
+	},
 	"author": "Robert Friedl (rdfriedl@gmail.com)",
 	"license": "ISC",
 	"repository": "rdfriedl/sharp-image-server",
 	"dependencies": {
 		"body-parser": "^1.18.3",
 		"compression": "^1.7.3",
-		"cors": "^2.8.4",
+		"cors": "^2.8.5",
 		"dotenv": "^6.1.0",
 		"express": "^4.16.4",
-		"husky": "^1.1.3",
 		"mime-types": "^2.1.21",
 		"mkdirp": "^0.5.1",
 		"morgan": "^1.9.1",
-		"prettier": "^1.14.3",
 		"qs": "^6.5.2",
 		"sharp": "^0.21.0"
 	},
 	"devDependencies": {
-		"nodemon": "^1.18.5"
+		"husky": "^1.1.4",
+		"nodemon": "^1.18.5",
+		"prettier": "^1.15.2",
+		"pretty-quick": "^1.8.0"
 	},
 	"prettier": {
 		"useTabs": true,
