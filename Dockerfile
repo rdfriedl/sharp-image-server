@@ -6,7 +6,7 @@ ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 
 VOLUME /cache
-VOLUME /images
+RUN mkdir -p /images
 ENV CACHE_DIR="/cache"
 ENV IMAGE_DIR="/images"
 
